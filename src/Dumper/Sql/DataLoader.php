@@ -50,7 +50,7 @@ class DataLoader
     {
         list($query, $parameters) = $this->buildSelectQuery($tableConfig, $table, $harvestedValues);
 
-        $this->logger->debug('Executing select query' . $query);
+        $this->logger->debug('Executing select query ' . $query);
         $result = $this->connectionHandler->getConnection()->prepare($query);
         $result->execute($parameters);
 
