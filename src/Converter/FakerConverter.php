@@ -27,6 +27,11 @@ class FakerConverter implements ConverterInterface
     private $arguments;
 
     /**
+     * @var array
+     */
+    private $condition;
+
+    /**
      * @param array  $parameters
      */
     public function __construct(array $parameters = array())
@@ -47,6 +52,7 @@ class FakerConverter implements ConverterInterface
         $this->faker = Faker\Factory::create($parameters['locale']);
         $this->formatter = $parameters['formatter'];
         $this->arguments = $parameters['arguments'];
+        $this->condition = isset( $parameters['condition'] ) ? $parameters['condition'] : false;
 
         if ($parameters['unique']) {
             $this->faker = new Faker\UniqueGenerator($this->faker, $parameters['maxRetries']);
@@ -58,6 +64,18 @@ class FakerConverter implements ConverterInterface
      */
     public function convert($value, array $context = array())
     {
-        return $this->faker->format($this->formatter, $this->arguments);
+        if ( ! $this->condition )
+        {
+            return $this->faker->format($this->formatter, $this->arguments);
+        }
+
+        extract( $context );
+
+        if ( eval( sprintf( 'return (%s);', $this->condition ) ) )
+        {
+            return $this->faker->format($this->formatter, $this->arguments);
+        }
+
+        return $value;
     }
 }
