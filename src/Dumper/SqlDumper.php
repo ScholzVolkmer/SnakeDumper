@@ -68,6 +68,7 @@ class SqlDumper implements DumperInterface
             $dumpOutput->writeln($extra);
         }
 
+        $context->getDumpOutput()->writeln( "SET NAMES 'utf8' COLLATE 'utf8_general_ci';" );
         $context->getDumpOutput()->writeln( "SET FOREIGN_KEY_CHECKS=0;" );
 
         $dumpOutput->writeln('');
