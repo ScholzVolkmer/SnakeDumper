@@ -43,9 +43,11 @@ class StructureDumper
     public function dumpTableStructure(array $tables)
     {
         $this->logger->info('Dumping table structure');
-        foreach ($tables as $table) {
-            $structure = $this->platform->getCreateTableSQL($table);
 
+        foreach ($tables as $table) {
+            $tableName = $table instanceof Table ? $table->getQuotedName( $this->platform ) : $table;
+            $this->dumpOutput->writeln( "DROP TABLE IF EXISTS {$tableName};" );
+            $structure = $this->platform->getCreateTableSQL($table);
             $this->dumpOutput->writeln(implode(";\n", $structure) . ';');
         }
     }
