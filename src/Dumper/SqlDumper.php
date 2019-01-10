@@ -45,6 +45,8 @@ class SqlDumper implements DumperInterface
         }
         $this->dumpTables($context, $tables);
         $structureDumper->dumpConstraints($tables);
+
+        $context->getDumpOutput()->writeln( "SET FOREIGN_KEY_CHECKS=1;" );
     }
 
     /**
@@ -65,6 +67,8 @@ class SqlDumper implements DumperInterface
         foreach ($extras as $extra) {
             $dumpOutput->writeln($extra);
         }
+
+        $context->getDumpOutput()->writeln( "SET FOREIGN_KEY_CHECKS=0;" );
 
         $dumpOutput->writeln('');
     }
